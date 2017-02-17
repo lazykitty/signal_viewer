@@ -26,6 +26,7 @@ namespace Signal_viewer
             InitializeComponent();
             SaveFormSize();
             table = new DataTable("Mic");
+            ListBox1_ShowFilesInFolder(Properties.Settings.Default.defaultFolderPath);  
         }
 
         private void SaveFormSize()
@@ -77,16 +78,8 @@ namespace Signal_viewer
             {
                 Properties.Settings.Default.defaultFolderPath = fbd.SelectedPath;
                 Properties.Settings.Default.Save(); //保存最後開啟的FOLDER設定值
-                //Properties.Settings.Default.Upgrade();
-                listBox1.Items.Clear();
 
-                string[] filenames = Directory.GetFiles(fbd.SelectedPath);
-                foreach (string n in filenames)
-                {
-                    string s = n.ToLower();
-                    if (s.Contains(".csv"))
-                        listBox1.Items.Add(n);
-                }
+                ListBox1_ShowFilesInFolder(fbd.SelectedPath);                
             }            
         }
 
@@ -131,6 +124,20 @@ namespace Signal_viewer
 
         }
 
+        private void ListBox1_ShowFilesInFolder(string path)
+        {
+            listBox1.Items.Clear();
+            if (Directory.Exists(path))
+            {
+                string[] filenames = Directory.GetFiles(path);
+                foreach (string n in filenames)
+                {
+                    string s = n.ToLower();
+                    if (s.Contains(".csv"))
+                        listBox1.Items.Add(n);
+                }
+            }
+        }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
