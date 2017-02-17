@@ -74,13 +74,16 @@ namespace Signal_viewer.Util
         /// Open file manager to select folder 
         /// </summary>
         /// <returns></returns>
-        static internal FolderBrowserDialog SelectFolder()
+        static internal FolderBrowserDialog SelectFolder(string defaultFilePath)
         {
             using (var fbd = new FolderBrowserDialog())
             {
                 fbd.RootFolder = Environment.SpecialFolder.MyComputer;
-                DialogResult result = fbd.ShowDialog();
+                /* 找回上一次打開的路徑 */
+                if(Directory.Exists(defaultFilePath))
+                    fbd.SelectedPath = defaultFilePath; 
 
+                DialogResult result = fbd.ShowDialog();
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {                    
                     return fbd;

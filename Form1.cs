@@ -25,7 +25,6 @@ namespace Signal_viewer
         {
             InitializeComponent();
             SaveFormSize();
-            //g = pictureBox1.CreateGraphics();
             table = new DataTable("Mic");
         }
 
@@ -73,18 +72,19 @@ namespace Signal_viewer
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = FileIO.SelectFolder();
+            FolderBrowserDialog fbd = FileIO.SelectFolder(Properties.Settings.Default.defaultFolderPath);
             if (fbd != null)
             {
+                Properties.Settings.Default.defaultFolderPath = fbd.SelectedPath;
+                Properties.Settings.Default.Save(); //保存最後開啟的FOLDER設定值
+                //Properties.Settings.Default.Upgrade();
                 listBox1.Items.Clear();
-                //add files into filelist
+
                 string[] filenames = Directory.GetFiles(fbd.SelectedPath);
-                //List<string> fileList = new List<string>();
                 foreach (string n in filenames)
                 {
                     string s = n.ToLower();
                     if (s.Contains(".csv"))
-                        //fileList.Add(n);
                         listBox1.Items.Add(n);
                 }
             }            
@@ -133,9 +133,12 @@ namespace Signal_viewer
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string file = listBox1.SelectedItem.ToString();
-            LoadFileToTable(file);
-            
+            try
+            {
+                string file = listBox1.SelectedItem.ToString();
+                LoadFileToTable(file);
+            }
+            catch { }            
         }
 
         private void LoadFileToTable(string filename)
@@ -156,11 +159,6 @@ namespace Signal_viewer
                 chart1.DataSource = table;
                 chart1.DataBind();
             }
-        }
-
-        private void AutoFormSize()
-        {
-
         }
     }
 }
