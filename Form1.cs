@@ -15,7 +15,6 @@ namespace Signal_viewer
 {
     public partial class Form1 : Form
     {
-        private System.Drawing.Graphics g;
         private System.Drawing.Pen penRaw = new System.Drawing.Pen(Color.Gray, 1F);
         private System.Drawing.Pen penFir = new System.Drawing.Pen(Color.Orange, 1.5F);
         static  DataTable table;
